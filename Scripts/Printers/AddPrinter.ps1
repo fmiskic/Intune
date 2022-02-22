@@ -1,23 +1,44 @@
-##Static Variables
+<#
+.SYNOPSIS
+    Name: AddPrinter.ps1
+    The purpose of this script is to add a local printer to a device.
 
+.DESCRIPTION
+    This is a add printer script ideally used with Intune to create a .intunewinfile. This file can then be used to 
+    deploy to computer via Intune.
+
+.NOTES
+    Version 1.0
+
+#>
+
+##Static Variables (Do not change!)
+
+#Grab root path of script
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$DriverInf = "$DriverPath\$DriverInfName"
+#State driver path
 $DriverPath = "$PSScriptRoot\Driver"
 
-##Variables to Change
+##End of static Variables
+
+##Variables to Change (These need to be changed in order for the script to work)
+
+#Filename of the .inf Driver
+$DriverInfName = "example.inf" 
 
 #Name of the driver
-$DriverName = "Driver name goes here"
-
-#Filename of .inf for printer driver
-$DriverInfName = ".inf or similar goes here"
+$DriverName = "Xerox Global Print Driver PCL6" #Example
 
 #Hostname or ip of printer
-$portName = "hostname or direct ip of printer goes here"
+$portName = "hostname or ip goes here"
 
 #What you want your printer to be named on the system
-$PrinterName = "What you want the printer to be named goes here"
+$PrinterName = "Cookie Printer"
 
+##End Changing Variables
+
+#States the full driver path including driver .inf name
+$DriverInf = "$DriverPath\$DriverInfName"
 
 #Add Printer Script
 $checkPortExists = Get-Printerport -Name $portname -ErrorAction SilentlyContinue
@@ -36,4 +57,4 @@ Add-Printer -Name "$PrinterName" -PortName $portName -DriverName $DriverName
 else
 {
 Write-Warning "Printer Driver not installed"
-}
+} 

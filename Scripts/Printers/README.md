@@ -4,7 +4,7 @@ This script is intended for deploying network printers through the Company Porta
 ### How to use:
 1. Create a folder on your computer in `C:\Temp\AddPrinter` #This folder can be anything you'd like but you need to make sure to realize this is the root of the folder.
 
-2. You can download and copy the AddPrinter.ps1 to this new directory
+2. You can download and copy the `AddPrinter.ps1` to this new directory
 
 3. Download the drivers for the printer you are trying to add. Ideally this would be the extracted driver files (.inf)
 Copy the corresponding driver files to `C:\Temp\AddPrinter\Driver` *This is important as the script reads the driver from the root of the AddPrinter.ps1 script*
@@ -14,14 +14,16 @@ Copy the corresponding driver files to `C:\Temp\AddPrinter\Driver` *This is impo
 
 ### Creating the .intunewin file to be uploaded to Intune:
 1. Package the whole folder using IntuneWinAppUtil.exe 
-	* 	https://github.com/Microsoft/Microsoft-Win32-Content-Prep-Tool *please read how to use.*
+	* 	https://github.com/Microsoft/Microsoft-Win32-Content-Prep-Tool 
+
+	*Please read how to use the IntuneWinAppUtil.exe.*
 2. Run IntuneWinAppUtil.exe via cmdline. 
 	* Specify your source folder as `C:\Temp\AddPrinter`
 	* The setup file will be `AddPrinter.ps1`
 	* Output folder can also be `C:\Temp\AddPrinter`
-	* Say No to specify catalog folder. 
+	* Say `No` to specify catalog folder. 
 
-3. Then the .intunewin file should be created and found in C:\Temp\AddPrinter if following the guide
+3. The .intunewin file should be created and found in C:\Temp\AddPrinter if you are following the paths recommended in the readme.
 
 ### How to add the .intunewin file to Intune:
 1. Add the app to Intune via Apps>Windows then click +Add 
@@ -30,7 +32,8 @@ Copy the corresponding driver files to `C:\Temp\AddPrinter\Driver` *This is impo
 4. For the App information enter a Name, Description, Publisher, and an Icon. 
 5. Under Program Install/Uninstall command put `powershell.exe -ExecutionPolicy Bypass -File .\AddPrinter.ps1` *Note: Currently there is no uninstall script that I have created but it could be as simple as creating a script to remove it from the registry entry. Therefore the Install and Uninstall command are the same*
 6. For the Detection rule set Manual>Registry. Key Path: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\$PrinterName` from `AddPrinter.ps1`. *For example if `$PrinterName = Cookie` it would be `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\Cookie`.* 
-7. Then set the detection Method: Key exists
-8. Assign the script to the groups you would like. *Ideally it would be Available to devices so they can install as Self Service from Company Portal. Otherwise you can make it required to autoinstall*
+7. Set the detection Method: Key exists
+8. Assign the script to the groups you would like. 
 
+*Ideally this readme is in favor of making the printer Available to devices so they can install as Self Service from Company Portal. Otherwise you can make it required and it should autoinstall*
 
