@@ -10,6 +10,30 @@ This script is intended for deploying network printers through the Company Porta
 Copy the corresponding driver files to `C:\Temp\AddPrinter\Driver` *This is important as the script reads the driver from the root of the AddPrinter.ps1 script*
 
 ### Modifying the script:
+In the section `### Variables to Change ###`
+
+	1. $DriverInfName = "example.inf"
+*Enter the name of the .inf file you copied from the printer drivers you downloaded.*
+
+*For example: If I am using a Xerox Global Printer Driver it would be `$DriverInfName = "x3UNIVX.inf" `*
+
+	2. $DriverName = "Actual Driver Name Goes Here" 
+
+*For example: If I am using a Xerox Global Printer Driver it would be `DriverName = "Xerox Global Print Driver PCL6"`*
+
+	3. $portName = "hostname or ip goes here"
+
+*For example: `$portName = "192.168.22.9"` or `$portName = "cookie.hostname.com"`*
+
+	4. $PrinterName = "Cookie Printer"
+
+*The name the printer will have on the workstation*
+
+Once complete. Save the file. 
+
+*Note: You can also rename the .ps1 to something else but make sure when creating the .intunewin file you remember it is called this. Also in the Intune install command it needs to be this as well.*
+
+### End Changing Variables ###
 
 
 ### Creating the .intunewin file to be uploaded to Intune:
@@ -31,7 +55,8 @@ Copy the corresponding driver files to `C:\Temp\AddPrinter\Driver` *This is impo
 3. Select the .intunewin file you just created for the app package file.
 4. For the App information enter a Name, Description, Publisher, and an Icon. 
 5. Under Program Install/Uninstall command put `powershell.exe -ExecutionPolicy Bypass -File .\AddPrinter.ps1` *Note: Currently there is no uninstall script that I have created but it could be as simple as creating a script to remove it from the registry entry. Therefore the Install and Uninstall command are the same*
-6. For the Detection rule set Manual>Registry. Key Path: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\$PrinterName` from `AddPrinter.ps1`. *For example if `$PrinterName = Cookie` it would be `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\Cookie`.* 
+6. For the Detection rule set Manual>Registry. Key Path: `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\$PrinterName` from `AddPrinter.ps1`. 
+*For example if `$PrinterName = Cookie` it would be `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Print\Printers\Cookie`.* 
 7. Set the detection Method: Key exists
 8. Assign the script to the groups you would like. 
 
