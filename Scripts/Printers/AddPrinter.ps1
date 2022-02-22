@@ -12,16 +12,13 @@
 
 #>
 
-##Static Variables (Do not change!)
 
 #Grab root path of script
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 #State driver path
 $DriverPath = "$PSScriptRoot\Driver"
 
-##End of static Variables
-
-##Variables to Change (These need to be changed in order for the script to work)
+### Variables to Change (These need to be changed in order for the script to work) ###
 
 #Filename of the .inf Driver
 $DriverInfName = "example.inf" 
@@ -35,12 +32,12 @@ $portName = "hostname or ip goes here"
 #What you want your printer to be named on the system
 $PrinterName = "Cookie Printer"
 
-##End Changing Variables
+### End Changing Variables ###
 
-#States the full driver path including driver .inf name
+#States the full driver path including driver .inf name, declared after DriverInfName is added.
 $DriverInf = "$DriverPath\$DriverInfName"
 
-#Add Printer Script
+##The script
 $checkPortExists = Get-Printerport -Name $portname -ErrorAction SilentlyContinue
 
 if (-not $checkPortExists) {
