@@ -41,18 +41,18 @@ $DriverInf = "$DriverPath\$DriverInfName"
 ##The script
 $checkPortExists = Get-Printerport -Name $portname -ErrorAction SilentlyContinue
 
-if (-not $checkPortExists) {
-
-Add-PrinterPort -name $portName -PrinterHostAddress "$portName"
+if (-not $checkPortExists) 
+{
+    Add-PrinterPort -name $portName -PrinterHostAddress "$portName"
 }
 cscript "C:\Windows\System32\Printing_Admin_Scripts\en-US\Prndrvr.vbs" -a -m "$DriverName" -h $DriverPath -i $DriverInf
 $printDriverExists = Get-PrinterDriver -name $DriverName -ErrorAction SilentlyContinue
 
 if ($printDriverExists)
 {
-Add-Printer -Name "$PrinterName" -PortName $portName -DriverName $DriverName
+    Add-Printer -Name "$PrinterName" -PortName $portName -DriverName $DriverName
 }
 else
 {
-Write-Warning "Printer Driver not installed"
+    Write-Warning "Printer Driver not installed"
 } 
