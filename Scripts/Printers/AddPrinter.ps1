@@ -18,7 +18,8 @@ $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
 #State driver path
 $DriverPath = "$PSScriptRoot\Driver"
 
-### Variables to Change (These need to be changed in order for the script to work) ###
+### Variables to Change ###
+#(These need to be changed in order for the script to work)
 
 #Filename of the .inf Driver
 $DriverInfName = "example.inf" 
