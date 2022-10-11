@@ -13,46 +13,44 @@
 #>
 
 
-#Grab root path of script
+##Static Variables
+
 $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-#State driver path
 $DriverPath = "$PSScriptRoot\Driver"
-
-### Variables to Change ###
-#(These need to be changed in order for the script to work)
-
-#Filename of the .inf Driver
-$DriverInfName = "example.inf" 
-
-#Name of the driver
-$DriverName = "Xerox Global Print Driver PCL6" #Example
-
-#Hostname or ip of printer
-$portName = "hostname or ip goes here"
-
-#What you want your printer to be named on the system
-$PrinterName = "Cookie Printer"
-
-### End Changing Variables ###
-
-#States the full driver path including driver .inf name, declared after DriverInfName is added.
+#Filename of .inf for printer driver. This is the only thing that needs to be changed.
+$DriverInfName = "OEMSETUP.inf"
 $DriverInf = "$DriverPath\$DriverInfName"
 
-##The script
+
+##Variables to Change
+
+#Name of the driver. You will need to stage or install the printer to see the name of the actual driver
+$DriverName = "Printer Driver"
+
+#Hostname or ip of printer
+$portName = "myprinter.com or 192.168.1.5 for example"
+
+#What you want your printer to be named on the system. It can be anything.
+$PrinterName = "The printer name on the system"
+
+#Printer 
+$PrndrvrVBS = Resolve-Path "C:\Windows\System32\Printing_Admin_Scripts\*\Prndrvr.vbs" |Select -First 1
+
+#Add Printer Script
 $checkPortExists = Get-Printerport -Name $portname -ErrorAction SilentlyContinue
 
-if (-not $checkPortExists) 
-{
-    Add-PrinterPort -name $portName -PrinterHostAddress "$portName"
+if (-not $checkPortExists) {
+
+Add-PrinterPort -name $portName -PrinterHostAddress "$portName"
 }
-cscript "C:\Windows\System32\Printing_Admin_Scripts\en-US\Prndrvr.vbs" -a -m "$DriverName" -h $DriverPath -i $DriverInf
+cscript "$PrndrvrVBS" -a -m "$DriverName" -h $DriverPath -i $DriverInf
 $printDriverExists = Get-PrinterDriver -name $DriverName -ErrorAction SilentlyContinue
 
 if ($printDriverExists)
 {
-    Add-Printer -Name "$PrinterName" -PortName $portName -DriverName $DriverName
+Add-Printer -Name "$PrinterName" -PortName $portName -DriverName $DriverName
 }
 else
 {
-    Write-Warning "Printer Driver not installed"
+Write-Warning "Printer Driver not installed"
 } 
